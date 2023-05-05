@@ -30,6 +30,7 @@ check.addEventListener('click', function() {
 
 again.addEventListener(`click`, function() {
   score.textContent = `20`
+  number.textContent = `?`
   check.disabled = false
   guess.disabled = false
   guess.value = ``
