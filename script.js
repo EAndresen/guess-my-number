@@ -1,45 +1,45 @@
 'use strict';
+let secretNumber = randomInt()
+let score = 20
+let highScore = 0
 
-let rndInt = randomInt()
+const guessEl = document.querySelector(`.guess`)
+const againEl = document.querySelector(`.again`)
+const highScoreEl = document.querySelector(`.high-score`)
+const checkEl = document.querySelector(`.check`)
+const numberEl = document.querySelector(`.number`)
 
-const guessElement = document.querySelector(`.guess`);
-const againElement = document.querySelector(`.again`);
-const messageElement = document.querySelector(`.message`);
-const scoreElement = document.querySelector(`.score`);
-const highscoreElement = document.querySelector(`.highscore`);
-const checkElement = document.querySelector(`.check`);
-const numberElement = document.querySelector(`.number`);
+setScore(String(score))
 
-checkElement.addEventListener('click', function() {
-  numberElement.textContent = guessElement.value
-  const guess = Number(guessElement.value)
+checkEl.addEventListener('click', function() {
+  setGuessedNumber(guessEl.value)
+  setScore(String(score))
+  const guess = Number(guessEl.value)
 
-  if (!guess) {
-    messageElement.textContent = `Not a number! ⛔`
-    numberElement.textContent = `⛔`
-  } else if (guess === rndInt) {
-    messageElement.textContent = `You guessed right! 🥳`
-    checkHighScore(Number(scoreElement.textContent))
-    checkElement.disabled = true
-    guessElement.disabled = true
-    document.body.style.backgroundColor = `#176009`
-  } else if (guess > rndInt) {
-    messageElement.textContent = `Guess to high ⬆️`
-    scoreElement.textContent--
+  if (!guess || guess < 0 || guess > 20) {
+    displayMessage(`Not a valid number! ⛔`)
+    setGuessedNumber(`⛔`)
+  } else if (guess === secretNumber) {
+    displayMessage(`You guessed right! 🥳`)
+    winGame()
   } else {
-    messageElement.textContent = `Guess to low ⬇️️`
-    scoreElement.textContent--
+    displayMessage(
+        guess > secretNumber ? `Guess to high ⬆️` : `Guess to low ⬇️️`)
+    evaluateFaultGuess()
   }
 })
 
-againElement.addEventListener(`click`, function() {
-  scoreElement.textContent = `20`
-  numberElement.textContent = `?`
-  checkElement.disabled = false
-  guessElement.disabled = false
-  guessElement.value = ``
-  rndInt = randomInt()
-  document.body.style.backgroundColor = `#222`
+againEl.addEventListener(`click`, function() {
+  setScore(`20`)
+  setGuessedNumber(`?`)
+  checkEl.disabled = false
+  guessEl.disabled = false
+  guessEl.value = ``
+  secretNumber = randomInt()
+  score = 20
+  setBackground(`#222`)
+  numberEl.style.width = `15rem`
+  numberEl.style.fontSize = `6rem`
 })
 
 function randomInt() {
@@ -47,8 +47,48 @@ function randomInt() {
 }
 
 function checkHighScore(newScore) {
-  if (newScore > Number(highscoreElement.textContent)) {
-    highscoreElement.textContent = newScore
+  if (newScore > highScore) {
+    highScoreEl.textContent = newScore
+    highScore = newScore
   }
 }
 
+function evaluateFaultGuess() {
+  score--
+  setScore(String(score))
+  if (score === 1) {
+    looseGame()
+  }
+}
+
+function looseGame() {
+  checkEl.disabled = true
+  guessEl.disabled = true
+  displayMessage(`You loose! 😈`)
+  setBackground(`#600909`)
+}
+
+function winGame() {
+  checkEl.disabled = true
+  guessEl.disabled = true
+  checkHighScore(score)
+  setBackground(`#176009`)
+  numberEl.style.width = `30rem`
+  numberEl.style.fontSize = `12rem`
+}
+
+function displayMessage(message) {
+  document.querySelector(`.message`).textContent = message
+}
+
+function setBackground(color) {
+  document.body.style.backgroundColor = color
+}
+
+function setGuessedNumber(number) {
+  document.querySelector(`.number`).textContent = number
+}
+
+function setScore(score) {
+  document.querySelector(`.score`).textContent = score
+}
