@@ -64,6 +64,8 @@ function evaluateFaultGuess() {
 function looseGame() {
   checkEl.disabled = true
   guessEl.disabled = true
+  score--
+  setScore(score)
   displayMessage(`You loose! 😈`)
   setBackground(`#600909`)
 }
