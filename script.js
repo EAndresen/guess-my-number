@@ -2,38 +2,42 @@
 
 let rndInt = randomInt()
 
-const guess = document.querySelector(`.guess`);
-const again = document.querySelector(`.again`);
-const message = document.querySelector(`.message`);
-const score = document.querySelector(`.score`);
-const highscore = document.querySelector(`.highscore`);
-const check = document.querySelector(`.check`);
-const number = document.querySelector(`.number`);
+const guessElement = document.querySelector(`.guess`);
+const againElement = document.querySelector(`.again`);
+const messageElement = document.querySelector(`.message`);
+const scoreElement = document.querySelector(`.score`);
+const highscoreElement = document.querySelector(`.highscore`);
+const checkElement = document.querySelector(`.check`);
+const numberElement = document.querySelector(`.number`);
 
-check.addEventListener('click', function() {
-  number.textContent = guess.value
+checkElement.addEventListener('click', function() {
+  numberElement.textContent = guessElement.value
+  const guess = Number(guessElement.value)
 
-  if (Number(guess.value) === rndInt) {
-    message.textContent = `You guessed right! 🥳`
-    checkHighScore(Number(score.textContent))
-    check.disabled = true
-    guess.disabled = true
+  if (!guess) {
+    messageElement.textContent = `Not a number! ⛔`
+    numberElement.textContent = `⛔`
+  } else if (guess === rndInt) {
+    messageElement.textContent = `You guessed right! 🥳`
+    checkHighScore(Number(scoreElement.textContent))
+    checkElement.disabled = true
+    guessElement.disabled = true
     document.body.style.backgroundColor = `#176009`
-  } else if (Number(guess.value) > rndInt) {
-    message.textContent = `Guess to high ⬆️`
-    score.textContent--
+  } else if (guess > rndInt) {
+    messageElement.textContent = `Guess to high ⬆️`
+    scoreElement.textContent--
   } else {
-    message.textContent = `Guess to low ⬇️️`
-    score.textContent--
+    messageElement.textContent = `Guess to low ⬇️️`
+    scoreElement.textContent--
   }
 })
 
-again.addEventListener(`click`, function() {
-  score.textContent = `20`
-  number.textContent = `?`
-  check.disabled = false
-  guess.disabled = false
-  guess.value = ``
+againElement.addEventListener(`click`, function() {
+  scoreElement.textContent = `20`
+  numberElement.textContent = `?`
+  checkElement.disabled = false
+  guessElement.disabled = false
+  guessElement.value = ``
   rndInt = randomInt()
   document.body.style.backgroundColor = `#222`
 })
@@ -43,8 +47,8 @@ function randomInt() {
 }
 
 function checkHighScore(newScore) {
-  if (newScore > Number(highscore.textContent)) {
-    highscore.textContent = newScore
+  if (newScore > Number(highscoreElement.textContent)) {
+    highscoreElement.textContent = newScore
   }
 }
 
